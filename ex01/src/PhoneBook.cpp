@@ -6,7 +6,7 @@
 /*   By: rleskine <rleskine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 09:16:32 by rleskine          #+#    #+#             */
-/*   Updated: 2023/11/15 14:17:37 by rleskine         ###   ########.fr       */
+/*   Updated: 2023/11/15 15:26:17 by rleskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ void    PhoneBook::add()
 
     contacts[i].reset();
     std::cout << "Adding new contact. Please enter the following information, no empty fields allowed: \n";
-    contacts[i].setInfo(getInput("First name :"));
-    contacts[i].setInfo(getInput("Last name :"));
-    contacts[i].setInfo(getInput("Nickname :"));
-    contacts[i].setInfo(getInput("Phone number :"));
-    contacts[i].setInfo(getInput("Darkest secret :"));
+    contacts[i].setInfo(getInput("First name> "));
+    contacts[i].setInfo(getInput("Last name> "));
+    contacts[i].setInfo(getInput("Nickname> "));
+    contacts[i].setInfo(getInput("Phone number> "));
+    contacts[i].setInfo(getInput("Darkest secret> "));
     if (index <= 7)
         std::cout << "Contact " << index + 1 << " added\n";
     else
