@@ -1,30 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   HumanA.hpp                                         :+:      :+:    :+:   */
+/*   supersed.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rleskine <rleskine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/16 12:53:16 by rleskine          #+#    #+#             */
-/*   Updated: 2023/11/17 13:28:54 by rleskine         ###   ########.fr       */
+/*   Created: 2023/11/17 13:52:33 by rleskine          #+#    #+#             */
+/*   Updated: 2023/11/20 13:16:36 by rleskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HUMANA_HPP
-#define HUMANA_HPP
+#ifndef	SUPERSED_HPP
+#define	SUPERSED_HPP
 
 #include <string>
-#include "Weapon.hpp"
+#include <iostream>
+#include <fstream>
 
-class HumanA {
-    public:
-		HumanA(std::string name, Weapon &weapon);
-		~HumanA();
-        void		attack();
-		void		setWeapon(Weapon &weapon);
-    private:
-        std::string name;
-		Weapon&		weapon;
+class SuperSed
+{
+private:
+	std::ifstream&			infile;
+	std::ofstream&			outfile;
+public:
+	SuperSed(std::ifstream& infile, std::ofstream& outfile);
+	~SuperSed();
+	bool	checkFiles();
+	bool	replacePattern(std::string pattern, std::string replace);
 };
 
 #endif
