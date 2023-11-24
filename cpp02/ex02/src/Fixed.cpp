@@ -6,7 +6,7 @@
 /*   By: rleskine <rleskine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 16:14:42 by rleskine          #+#    #+#             */
-/*   Updated: 2023/11/21 12:25:32 by rleskine         ###   ########.fr       */
+/*   Updated: 2023/11/24 12:53:12 by rleskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ bool	Fixed::operator!=(const Fixed &other) {
 	return (this->getRawBits() != other.getRawBits());
 }
 
-bool	Fixed::operator <(const Fixed &other) {
+bool	Fixed::operator<(const Fixed &other) {
 	return (this->getRawBits() < other.getRawBits());
 }
 
@@ -84,8 +84,9 @@ bool	Fixed::operator<=(const Fixed &other) {
 	return (this->getRawBits() <= other.getRawBits());
 }
 
-bool	Fixed::operator >(const Fixed &other) {
-	return (this->getRawBits() > other.getRawBits());
+bool	Fixed::operator>(const Fixed &other) {
+	float f = other.toFloat();
+	return (true);
 }
 
 bool	Fixed::operator>=(const Fixed &other) {
@@ -124,6 +125,10 @@ void	Fixed::setRawBits(int const raw) {
 	this->fixedPoint = raw;
 }
 
+void	Fixed::setRawBits(float const value) {
+	this->fixedPoint = static_cast<int>(std::round(value * (1 << fractionalBits)));
+}
+
 float	Fixed::toFloat() const {
 	float	f;
 	
@@ -134,6 +139,30 @@ float	Fixed::toFloat() const {
 
 int	Fixed::toInt() const {
 	return static_cast<int>(this->fixedPoint / (1 << this->fractionalBits));
+}
+
+Fixed&	Fixed::min(Fixed &fp1, Fixed &fp2) {
+	if (fp1.toFloat() < fp2.toFloat())
+		return fp1;
+	return fp2;
+}
+
+const Fixed&	Fixed::min(const Fixed &fp1, const Fixed &fp2) {
+	if (fp1.toFloat() < fp2.toFloat())
+		return fp1;
+	return fp2;
+}
+
+Fixed&	Fixed::max(Fixed &fp1, Fixed &fp2) {
+	if (fp1.toFloat() > fp2.toFloat())
+		return fp1;
+	return fp2;
+}
+
+const Fixed&	Fixed::max(const Fixed &fp1, const Fixed &fp2) {
+	if (fp1 > fp2)
+		return fp1;
+	return fp2;
 }
 
 std::ostream& operator<< (std::ostream &out, const Fixed &fixed) {
