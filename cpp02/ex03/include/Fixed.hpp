@@ -6,7 +6,7 @@
 /*   By: rleskine <rleskine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 16:09:41 by rleskine          #+#    #+#             */
-/*   Updated: 2023/11/24 14:42:21 by rleskine         ###   ########.fr       */
+/*   Updated: 2023/11/24 15:17:10 by rleskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ class Fixed
 	private:
 		static const int	fractionalBits	= 8;
 		int					fixedPoint;
+		bool				debugMsg;
 	public:
 		Fixed();
 		Fixed(bool debugMsg);
@@ -53,9 +54,9 @@ class Fixed
 		void	setRawBits(float const value);
 		float	toFloat() const;
 		int		toInt() const;
-		static Fixed&	min(Fixed &fp1, Fixed &fp2);
+		static Fixed&		min(Fixed &fp1, Fixed &fp2);
 		static const Fixed&	min(const Fixed &fp1, const Fixed &fp2);
-		static Fixed&	max(Fixed &fp1, Fixed &fp2);
+		static Fixed&		max(Fixed &fp1, Fixed &fp2);
 		static const Fixed&	max(const Fixed &fp1, const Fixed &fp2);
 };
 
