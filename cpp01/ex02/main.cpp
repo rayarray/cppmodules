@@ -6,7 +6,7 @@
 /*   By: rleskine <rleskine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 11:11:29 by rleskine          #+#    #+#             */
-/*   Updated: 2023/11/16 12:50:39 by rleskine         ###   ########.fr       */
+/*   Updated: 2023/11/27 14:05:13 by rleskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@ int	main() {
 	std::cout << "the value of the stringVAR: " << stringVAR << std::endl;
 	std::cout << "the value pointed to by stringPTR: " << *stringPTR << std::endl;
 	std::cout << "the value pointed to by stringREF: " << stringREF << std::endl;
+
+	// Testing again when setting stringREF to a new string
+
 	// std::cout << std::endl;
 	// std::cout << "stringREF = \"HI THIS IS BRIAN\"" << std::endl;
 	// stringREF = "HI THIS IS BRIAN";

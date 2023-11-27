@@ -6,7 +6,7 @@
 /*   By: rleskine <rleskine@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 21:20:53 by rleskine          #+#    #+#             */
-/*   Updated: 2023/11/15 22:44:19 by rleskine         ###   ########.fr       */
+/*   Updated: 2023/11/27 13:55:45 by rleskine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,13 @@
 #include <string>
 
 class Zombie {
+	private:
+        std::string name;
     public:
         Zombie();
         Zombie(std::string);
         ~Zombie();
         void    announce();
-
-    private:
-        std::string name;
 };
 
 Zombie  *newZombie(std::string name);
