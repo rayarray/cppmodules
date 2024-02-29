@@ -27,6 +27,7 @@ MateriaSource &MateriaSource::operator=(const MateriaSource &assign)
 		return *this;
 	for (int i = 0; i < 4; i++)
 		sources[i] = assign.sources[i]->clone();
+	// todo handle existing sources, will get lost 
 	return *this;
 }
 
