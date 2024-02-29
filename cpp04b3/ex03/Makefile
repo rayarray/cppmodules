@@ -6,14 +6,14 @@
 #    By: rleskine <rleskine@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/15 16:29:22 by rleskine          #+#    #+#              #
-#    Updated: 2024/01/24 16:27:44 by rleskine         ###   ########.fr        #
+#    Updated: 2024/02/29 13:51:12 by rleskine         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	InterfaceAndRecap
 
 SRC			=	main.cpp AMateria.cpp Ice.cpp Cure.cpp Character.cpp \
-				MateriaSource.cpp
+				MateriaSource.cpp MateriaCollector.cpp
 LIBS		=	
 
 SRCDIR		=	src

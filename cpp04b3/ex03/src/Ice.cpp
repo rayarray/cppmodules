@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Ice.cpp                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rleskine <rleskine@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/22 12:02:46 by rleskine          #+#    #+#             */
-/*   Updated: 2024/02/28 09:33:50 by rleskine         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "Ice.hpp"
 
 Ice::Ice(std::string const &type) : AMateria(type) {}
@@ -22,7 +10,11 @@ Ice &Ice::operator=(const Ice &assign)
 {
 	if (this == &assign)
 		return *this;
-	*this = Ice(assign.getType());
+	// Ice(assign.getType());
+	// return *this;
+	// delete this;
+	// return *new Ice(assign.type);
+	Ice(assign.type);
 	return *this;
 }
 

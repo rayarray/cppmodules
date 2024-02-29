@@ -1,18 +1,9 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Cure.cpp                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rleskine <rleskine@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/22 12:02:46 by rleskine          #+#    #+#             */
-/*   Updated: 2024/01/24 10:41:36 by rleskine         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "Cure.hpp"
 
-Cure::Cure(std::string const &type) : AMateria(type) {}
+Cure::Cure(std::string const &type) : AMateria(type)
+{
+	std::cout << "Cure constructor called" << std::endl;
+}
 
 Cure::Cure(const Cure &copy) : AMateria(copy.getType()) {}
 

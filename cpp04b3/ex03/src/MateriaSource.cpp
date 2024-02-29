@@ -1,18 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   MateriaSource.cpp                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rleskine <rleskine@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/23 13:35:09 by rleskine          #+#    #+#             */
-/*   Updated: 2024/01/26 10:20:57 by rleskine         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "MateriaSource.hpp"
 
-// Constructors
 MateriaSource::MateriaSource() : sources() {}
 
 MateriaSource::MateriaSource(const MateriaSource &copy)
@@ -26,8 +13,11 @@ MateriaSource &MateriaSource::operator=(const MateriaSource &assign)
 	if (this == &assign)
 		return *this;
 	for (int i = 0; i < 4; i++)
+	{
+		if (sources[i] != nullptr)
+			delete sources[i];
 		sources[i] = assign.sources[i]->clone();
-	// todo handle existing sources, will get lost 
+	}
 	return *this;
 }
 

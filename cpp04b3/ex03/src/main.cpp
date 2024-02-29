@@ -1,21 +1,10 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rleskine <rleskine@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/22 11:47:30 by rleskine          #+#    #+#             */
-/*   Updated: 2024/01/29 12:32:27 by rleskine         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "AMateria.hpp"
 #include "Ice.hpp"
 #include "Cure.hpp"
 #include "ICharacter.hpp"
 #include "Character.hpp"
 #include "MateriaSource.hpp"
+#include "MateriaCollector.hpp"
 
 int subjectTests()
 {
@@ -43,13 +32,15 @@ int subjectTests()
 
 int main()
 {
+	MateriaCollector garbage;
 	// subjectTests(); return 0;
-	AMateria *ice = new Ice();
+	AMateria *ice = garbage.collect(new Ice());
 	Ice frost = Ice("frost");
 	Ice frost2 = frost;
 	Ice frost3;
 	frost3 = frost;
-	AMateria *cure = new Cure();
+	std::cout << "break" << std::endl;
+	AMateria *cure = garbage.collect(new Cure());
 	std::cout << "Ice copy constructor: frost: " << &frost << " frost2: " << &frost2 << std::endl;
 	std::cout << "Ice copy assign: frost: " << &frost << " frost3: " << &frost3 << std::endl;
 	ICharacter *player1 = new Character("Iceman");
@@ -60,14 +51,14 @@ int main()
 	matsrc->learnMateria(&frost2);
 	matsrc->learnMateria(cure);
 	std::cout << "main:break" << std::endl;
-	player1->equip(matsrc->createMateria("ice"));
+	player1->equip(garbage.collect(matsrc->createMateria("ice")));
 	std::cout << "eq1" << std::endl;
-	player1->equip(matsrc->createMateria("frost"));
+	player1->equip(garbage.collect(matsrc->createMateria("frost")));
 	std::cout << "eq2" << std::endl;
-	player1->equip(matsrc->createMateria("cure"));
-	AMateria *unequiptest = matsrc->createMateria("frost");
+	player1->equip(garbage.collect(matsrc->createMateria("cure")));
+	AMateria *unequiptest = garbage.collect(matsrc->createMateria("frost"));
 	player1->equip(unequiptest);
-	player1->equip(cure); // inventory is full, if createMateria used here, will leak
+	player1->equip(garbage.collect(matsrc->createMateria("cure"))); // inventory is full, if createMateria used here, will leak
 	std::cout << "materias equipped" << std::endl;
 	player1->use(0, *player1); // ice to self
 	player1->use(1, *player1); // frost to self
@@ -75,7 +66,7 @@ int main()
 	player1->use(2, *player2); // cure to dummy
 	player2->use(0, *player1); // should not do anything
 	player1->unequip(3);
-	delete unequiptest;
+	// delete unequiptest;
 	dynamic_cast<Character *>(player1)->showEquip();
 	Character player3 = *(dynamic_cast<Character *>(player1)); // copy constructor test
 	player3.showEquip();
@@ -92,8 +83,6 @@ int main()
 	defconst.showSources("\e[1;34m");
 	delete player1;
 	delete player2;
-	delete ice;
-	delete cure;
 	delete matsrc;
 	return 0;
 }
