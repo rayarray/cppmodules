@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: rleskine <rleskine@student.hive.fi>        +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/03/15 16:29:22 by rleskine          #+#    #+#              #
-#    Updated: 2024/01/25 10:52:09 by rleskine         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME		=	Bureaucracy
 
 SRC			=	main.cpp Bureaucrat.cpp
@@ -25,7 +13,7 @@ LIBINC		=	$(foreach l, $(LIBS),-I $(l) -L $(l) -l$(l:lib%=%))
 LIBARC		=	$(foreach l, $(LIBS),$(l)/$(l).a)
 INCLUDE		=	$(foreach i, $(INCDIR),-I $(i)) $(foreach l, $(LIBS),-I $(l))
 
-CFLAGS		=	-Wall -Wextra -Werror -std=c++20
+CFLAGS		=	-Wall -Wextra -Werror -std=c++17
 SFLAGS		=	-fsanitize=address -g
 
 CC 			=	c++

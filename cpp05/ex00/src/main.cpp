@@ -1,16 +1,18 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rleskine <rleskine@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/25 10:52:20 by rleskine          #+#    #+#             */
-/*   Updated: 2024/01/25 10:52:34 by rleskine         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#include "Bureaucrat.hpp"
 
 int main()
 {
-	(void)0;
+	try
+	{
+		Bureaucrat("toohigh", 0);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what();
+	}
+	catch (...)
+	{
+		std::cout << "Caught exception of undetermined type" << std::endl;
+	}
+	Bureaucrat b("kyro k. kraatti", 125);
 }

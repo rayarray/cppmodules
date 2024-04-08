@@ -4,14 +4,18 @@
 #include <iostream>
 #include <string>
 
-class Bureaucrat
+class Bureaucrat : public std::exception
 {
 public:
+	// Exceptions
+	static std::string GradeTooHighException();
+	static std::string GradeTooLowException();
 	// Constructors
-	Bureaucrat(std::string name = "faceless", int grade = -1);
+	Bureaucrat(std::string name, int grade);
+	Bureaucrat();
 
 	// Destructor
-	~Bureaucrat() {}
+	~Bureaucrat();
 
 	// Getters / Setters
 	std::string getName() const;
@@ -20,7 +24,7 @@ public:
 	void downGrade() const;
 
 private:
-	std::string _name;
+	const std::string _name;
 	int _grade;
 };
 
