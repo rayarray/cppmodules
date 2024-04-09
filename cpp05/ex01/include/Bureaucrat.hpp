@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 
+class Form;
+
 struct BureaucratException : std::logic_error
 {
 	using logic_error::logic_error;
@@ -29,6 +31,7 @@ public:
 	int getGrade() const;
 	void upGrade();
 	void downGrade();
+	void signForm(Form &form);
 
 private:
 	const std::string _name;
