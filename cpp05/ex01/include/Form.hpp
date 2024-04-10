@@ -18,20 +18,27 @@ public:
 	// Constructors
 	Form(std::string name, int sign_grade, int exec_grade);
 	Form();
+	Form(const Form &copy);
 
 	// Destructor
 	~Form();
+
+	// Operators
+	Form &operator=(const Form &assign);
 
 	// Getters / Setters
 	std::string getName() const;
 	int getSignGrade() const;
 	int getExecGrade() const;
+	bool isSigned() const;
+
+	// Methods
 	void beSigned(const Bureaucrat &signer);
 
 private:
 	const std::string _name;
-	const int _sign_grade;
-	const int _exec_grade;
+	int _sign_grade;
+	int _exec_grade;
 	bool _signed;
 };
 

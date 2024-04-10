@@ -23,16 +23,33 @@ Form::Form(std::string name, int sign_grade, int exec_grade) : _name(name), _sig
 
 Form::Form() : Form("Standard Form", 150, 150) {}
 
+Form::Form(const Form &copy)
+{
+	std::cout << "\e[0;33mCopy Constructor called of \e[4;37mForm\e[0m" << std::endl;
+	*this = copy;
+}
+
 // Destructor
 Form::~Form()
 {
 	std::cout << "\e[0;31mDestructor called of \e[4;37mForm\e[0m" << std::endl;
 }
 
+// Operators
+Form &Form::operator=(const Form &assign)
+{
+	if (this == &assign)
+		return *this;
+	this->~Form();
+	new (this) Form(assign);
+	return *this;
+}
+
 // Getters / Setters
 std::string Form::getName() const { return _name; }
 int Form::getSignGrade() const { return _sign_grade; }
 int Form::getExecGrade() const { return _exec_grade; }
+bool Form::isSigned() const { return _signed; }
 
 void Form::beSigned(const Bureaucrat &signer)
 {

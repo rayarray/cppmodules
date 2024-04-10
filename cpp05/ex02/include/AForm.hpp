@@ -12,22 +12,22 @@ struct FormException : std::logic_error
 class AForm
 {
 public:
-	// Exceptions
+	// __Exceptions
 	FormException GradeTooHighException();
 	FormException GradeTooLowException();
-	// Constructors
+	// __Constructors
 	AForm(std::string name, int sign_grade, int exec_grade);
 	AForm();
-
-	// Destructor
+	// __Destructor
 	virtual ~AForm();
-
-	// Getters / Setters
+	// __Getters / Setters
 	virtual std::string getName() const;
 	virtual int getSignGrade() const;
 	virtual int getExecGrade() const;
+	virtual bool isSigned() const;
+	// __Methods
 	virtual void beSigned(const Bureaucrat &signer);
-	virtual void execute(Bureaucrat const &executor) const = 0;
+	virtual void execute(Bureaucrat const &executor) const;
 
 private:
 	const std::string _name;

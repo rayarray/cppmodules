@@ -25,6 +25,6 @@ private:
 	bool _signed;
 };
 
-std::ostream &operator<<(std::ostream &out, const Form &st);
+// std::ostream &operator<<(std::ostream &out, const Form &st);
 
 #endif

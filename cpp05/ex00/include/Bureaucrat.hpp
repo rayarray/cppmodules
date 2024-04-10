@@ -20,9 +20,13 @@ public:
 	// Constructors
 	Bureaucrat(std::string name, int grade);
 	Bureaucrat();
+	Bureaucrat(const Bureaucrat &copy);
 
 	// Destructor
 	~Bureaucrat();
+
+	// Operators
+	Bureaucrat &operator=(const Bureaucrat &assign);
 
 	// Getters / Setters
 	std::string getName() const;
@@ -32,7 +36,6 @@ public:
 
 private:
 	const std::string _name;
-	const std::string _msg;
 	int _grade;
 };
 

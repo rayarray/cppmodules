@@ -23,21 +23,31 @@ Bureaucrat::Bureaucrat(std::string name, int grade) : _name(name)
 
 Bureaucrat::Bureaucrat() : Bureaucrat("faceless", 150) {}
 
+Bureaucrat::Bureaucrat(const Bureaucrat &copy)
+{
+	std::cout << "\e[0;33mCopy Constructor called of Bureaucrat\e[0m" << std::endl;
+	*this = copy;
+}
+
 // Destructor
 Bureaucrat::~Bureaucrat()
 {
 	std::cout << "\e[0;31mDestructor called of Bureaucrat\e[0m" << std::endl;
 }
 
+// Operators
+Bureaucrat &Bureaucrat::operator=(const Bureaucrat &assign)
+{
+	if (this == &assign)
+		return *this;
+	this->~Bureaucrat();
+	new (this) Bureaucrat(assign);
+	return *this;
+}
+
 // Getters / Setters
-std::string Bureaucrat::getName() const
-{
-	return _name;
-}
-int Bureaucrat::getGrade() const
-{
-	return _grade;
-}
+std::string Bureaucrat::getName() const { return _name; }
+int Bureaucrat::getGrade() const { return _grade; }
 
 void Bureaucrat::upGrade()
 {

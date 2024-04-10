@@ -33,7 +33,9 @@ AForm::~Form()
 std::string AForm::getName() const { return _name; }
 int AForm::getSignGrade() const { return _sign_grade; }
 int AForm::getExecGrade() const { return _exec_grade; }
+bool AForm::isSigned() const { return _signed; }
 
+// Methods
 void AForm::beSigned(const Bureaucrat &signer)
 {
 	if (signer.getGrade() > _sign_grade)
@@ -41,6 +43,12 @@ void AForm::beSigned(const Bureaucrat &signer)
 	_signed = true;
 }
 
+void execute(Bureaucrat const &executor) const
+{
+	if (this->)
+}
+
+// Operators
 std::ostream &operator<<(std::ostream &out, const Form &st)
 {
 	out << "This is a " << st.getName()
