@@ -5,20 +5,15 @@
 #include <iostream>
 #include <string>
 
-class Form;
-
-struct BureaucratException : std::logic_error
-{
-	using logic_error::logic_error;
-	BureaucratException() : logic_error("Undefined Bureaucrat exception\n") {}
-};
+class AForm;
 
 class Bureaucrat
 {
+private:
+	const std::string _name;
+	int _grade;
+
 public:
-	// Exceptions
-	static BureaucratException GradeTooHighException();
-	static BureaucratException GradeTooLowException();
 	// Constructors
 	Bureaucrat(std::string name, int grade);
 	Bureaucrat();
@@ -33,13 +28,26 @@ public:
 	// Getters / Setters
 	std::string getName() const;
 	int getGrade() const;
+
+	// Methods
 	void upGrade();
 	void downGrade();
-	void signForm(Form &form);
+	void signForm(AForm &form);
+	void executeForm(AForm const &form);
 
-private:
-	const std::string _name;
-	int _grade;
+	// __Exceptions
+	class GradeTooHighException : public std::runtime_error
+	{
+	public:
+		GradeTooHighException()
+			: std::runtime_error("\e[1;97mBureaucrat exception: Grade too high\e[0m\n") {}
+	};
+	class GradeTooLowException : public std::runtime_error
+	{
+	public:
+		GradeTooLowException()
+			: std::runtime_error("\e[1;97mBureaucrat exception: Grade too low\e[0m\n") {}
+	};
 };
 
 std::ostream &operator<<(std::ostream &out, const Bureaucrat &st);

@@ -3,28 +3,36 @@
 
 #include "AForm.hpp"
 
+// Define the structure for the individual shrubs
+struct Shrub
+{
+	int val;
+	Shrub *left;
+	Shrub *right;
+};
+
 class ShrubberyCreationForm : virtual public AForm
 {
 public:
 	// Constructors
 	ShrubberyCreationForm(std::string target);
+	ShrubberyCreationForm();
 
 	// Destructor
 	virtual ~ShrubberyCreationForm();
 
 	// Getters / Setters
-	virtual std::string getName() const;
-	virtual int getSignGrade() const;
-	virtual int getExecGrade() const;
-	virtual void beSigned(const Bureaucrat &signer);
+	// virtual std::string getName() const;
+	// virtual int getSignGrade() const;
+	// virtual int getExecGrade() const;
+	// virtual void beSigned(const Bureaucrat &signer);
+	void action() const;
 
 private:
-	const std::string _name;
-	const int _sign_grade;
-	const int _exec_grade;
-	bool _signed;
+	Shrub *newShrub(int val) const;
+	void insert(Shrub *&root, int val) const;
+	void printToFile(Shrub *root, std::ofstream &file) const;
+	void freeShrub(Shrub *root) const;
 };
-
-// std::ostream &operator<<(std::ostream &out, const Form &st);
 
 #endif

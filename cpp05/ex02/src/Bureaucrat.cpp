@@ -1,16 +1,6 @@
 #include "Bureaucrat.hpp"
-#include "Form.hpp"
+#include "AForm.hpp"
 
-// Exceptions
-BureaucratException Bureaucrat::GradeTooHighException()
-{
-	return BureaucratException("\e[1;97mBureaucrat exception: Grade too high\e[0m\n");
-}
-
-BureaucratException Bureaucrat::GradeTooLowException()
-{
-	return BureaucratException("\e[1;97mBureaucrat exception: Grade too low\e[0m\n");
-}
 // Constructors
 Bureaucrat::Bureaucrat(std::string name, int grade) : _name(name)
 {
@@ -64,7 +54,7 @@ void Bureaucrat::downGrade()
 	_grade--;
 }
 
-void Bureaucrat::signForm(Form &form)
+void Bureaucrat::signForm(AForm &form)
 {
 	try
 	{
@@ -74,6 +64,19 @@ void Bureaucrat::signForm(Form &form)
 	catch (std::exception &e)
 	{
 		std::cout << this->getName() << " couldn't sign " << form.getName() << " because " << e.what();
+	}
+}
+
+void Bureaucrat::executeForm(AForm const &form)
+{
+	try
+	{
+		form.execute(*this);
+		std::cout << this->getName() << " executed " << form.getName() << std::endl;
+	}
+	catch (std::exception &e)
+	{
+		std::cout << this->getName() << " couldn't execute" << form.getName() << " because " << e.what();
 	}
 }
 
