@@ -1,7 +1,7 @@
 NAME		=	Bureaucracy
 
 SRC			=	main.cpp Bureaucrat.cpp AForm.cpp \
-				ShrubberyCreationForm.cpp
+				ShrubberyCreationForm.cpp RobotomyRequestForm.cpp
 LIBS		=	
 
 SRCDIR		=	src
