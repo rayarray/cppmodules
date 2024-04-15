@@ -15,3 +15,8 @@ void PresidentialPardonForm::action() const
 {
 	std::cout << this->getTarget() << " has been pardoned by Zaphod Beeblebrox" << std::endl;
 }
+
+AForm *PresidentialPardonForm::clone(std::string target)
+{
+	return new PresidentialPardonForm(target);
+}

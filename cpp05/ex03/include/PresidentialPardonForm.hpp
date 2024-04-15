@@ -15,6 +15,7 @@ public:
 
 	// Getters / Setters
 	void action() const;
+	AForm *clone(std::string target);
 };
 
 #endif

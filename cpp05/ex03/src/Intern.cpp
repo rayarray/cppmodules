@@ -29,8 +29,16 @@ Intern &Intern::operator=(const Intern &assign)
 }
 
 // Methods
-AForm *makeForm(std::string formName, std::string target)
+void Intern::learnForm(AForm &form)
 {
+	std::cout << typeid(form).name() << " <-typeid quote-> " << quote(form) << std::endl;
+}
+
+AForm *Intern::makeForm(std::string formName, std::string target)
+{
+	(void)formName;
+	(void)target;
+	return nullptr;
 }
 
 // Exceptions
@@ -40,8 +48,9 @@ const char *Intern::FormDoesNotExist::what() const throw()
 }
 
 // Stream operators
-std::ostream &operator<<(std::ostream &stream, const Intern &object)
+std::ostream &operator<<(std::ostream &out, const Intern &st)
 {
-	stream << "std::ostream &out, const Intern &st" << std::endl;
-	return stream;
+	(void)st;
+	out << "std::ostream &out, const Intern &st" << std::endl;
+	return out;
 }

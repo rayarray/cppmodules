@@ -48,7 +48,8 @@ void AForm::execute(Bureaucrat const &executor) const
 }
 
 // Operators
-std::ostream &operator<<(std::ostream &out, const AForm &st)
+std::ostream &
+operator<<(std::ostream &out, const AForm &st)
 {
 	out << "This is a " << st.getName()
 		<< " form that requires a grade of " << st.getSignGrade()

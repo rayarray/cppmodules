@@ -1,7 +1,5 @@
 #include "Bureaucrat.hpp"
-#include "ShrubberyCreationForm.hpp"
-#include "RobotomyRequestForm.hpp"
-#include "PresidentialPardonForm.hpp"
+#include "Intern.hpp"
 
 int main()
 {
@@ -31,6 +29,13 @@ int main()
 	std::cout << joe_exotic;
 	b001.signForm(joe_exotic);
 	b001.executeForm(joe_exotic);
+	Intern temp;
+	temp.learnForm(yard);
+	temp.learnForm(defaultshrub);
+	temp.learnForm(robotomy);
+	temp.learnForm(joe_exotic);
+	AForm *joe2 = joe_exotic.clone("joe2");
+	std::cout << *joe2 << " and its target is " << joe2->getTarget() << std::endl;
 	// try
 	// {
 	// 	std::cout << "Trying to create form with sign grade 0" << std::endl;

@@ -22,3 +22,8 @@ void RobotomyRequestForm::action() const
 	else
 		std::cout << "Robotomy attempt at " << this->getTarget() << " has failed!" << std::endl;
 }
+
+AForm *RobotomyRequestForm::clone(std::string target)
+{
+	return new RobotomyRequestForm(target);
+}

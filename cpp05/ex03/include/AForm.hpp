@@ -29,6 +29,7 @@ public:
 	virtual void beSigned(const Bureaucrat &signer);
 	virtual void execute(Bureaucrat const &executor) const;
 	virtual void action() const = 0;
+	virtual AForm *clone(std::string target) = 0;
 
 	// __Exceptions
 	class GradeTooHighException : public std::runtime_error

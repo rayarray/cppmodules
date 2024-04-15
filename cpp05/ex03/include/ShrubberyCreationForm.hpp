@@ -27,12 +27,7 @@ public:
 	// virtual int getExecGrade() const;
 	// virtual void beSigned(const Bureaucrat &signer);
 	void action() const;
-
-private:
-	Shrub *newShrub(int val) const;
-	void insert(Shrub *&root, int val) const;
-	void printToFile(Shrub *root, std::ofstream &file) const;
-	void freeShrub(Shrub *root) const;
+	AForm *clone(std::string target);
 };
 
 #endif

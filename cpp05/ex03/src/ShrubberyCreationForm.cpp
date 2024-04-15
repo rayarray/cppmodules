@@ -25,3 +25,8 @@ void ShrubberyCreationForm::action() const
 	file << "       / \\  ^\n";
 	file.close();
 }
+
+AForm *ShrubberyCreationForm::clone(std::string target)
+{
+	return new ShrubberyCreationForm(target);
+}
