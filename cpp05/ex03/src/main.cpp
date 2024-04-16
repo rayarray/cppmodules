@@ -3,50 +3,15 @@
 
 int main()
 {
-	Bureaucrat b001("b001", 1);
-	std::cout << b001;
-	Bureaucrat b050("b050", 50);
-	std::cout << b050;
-	Bureaucrat b100("b100", 100);
-	std::cout << b100;
-	Bureaucrat b150("b150", 150);
-	std::cout << b150;
 	ShrubberyCreationForm yard("yard");
-	std::cout << yard;
-	ShrubberyCreationForm defaultshrub;
-	b001.executeForm(yard);
-	b100.signForm(yard);
-	b001.executeForm(yard);
-	b150.executeForm(yard);
-	b150.signForm(defaultshrub);
-	b001.signForm(defaultshrub);
-	b100.executeForm(defaultshrub);
 	RobotomyRequestForm robotomy;
-	std::cout << robotomy;
-	b001.signForm(robotomy);
-	b001.executeForm(robotomy);
 	PresidentialPardonForm joe_exotic("Joe Exotic");
-	std::cout << joe_exotic;
-	b001.signForm(joe_exotic);
-	b001.executeForm(joe_exotic);
 	Intern temp;
-	temp.learnForm(yard);
-	temp.learnForm(defaultshrub);
-	temp.learnForm(robotomy);
-	temp.learnForm(joe_exotic);
-	AForm *joe2 = joe_exotic.clone("joe2");
-	std::cout << *joe2 << " and its target is " << joe2->getTarget() << std::endl;
-	// try
-	// {
-	// 	std::cout << "Trying to create form with sign grade 0" << std::endl;
-	// 	AForm f("invalid", 0, 150);
-	// }
-	// catch (std::exception &e)
-	// {
-	// 	std::cout << "\e[0;101mCatch!\e[0m " << e.what();
-	// }
-	// catch (...)
-	// {
-	// 	std::cout << "Caught exception of undetermined type" << std::endl;
-	// }
+	temp.learnForm("Shrubbery Creation", yard);
+	temp.learnForm("Robotomy Request", robotomy);
+	temp.learnForm("Presidential Pardon", joe_exotic);
+	AForm *intern_test = temp.makeForm("robotomy reQuest", "badrobot");
+	std::cout << *intern_test << intern_test->getTarget() << std::endl;
+	AForm *intern_test2 = temp.makeForm("boobaa", "not available");
+	std::cout << intern_test2 << std::endl;
 }

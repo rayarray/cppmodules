@@ -13,6 +13,9 @@ public:
 	// Destructor
 	virtual ~PresidentialPardonForm();
 
+	// Operators
+	PresidentialPardonForm &operator=(const PresidentialPardonForm &assign);
+
 	// Getters / Setters
 	void action() const;
 	AForm *clone(std::string target);

@@ -21,11 +21,10 @@ public:
 	// Destructor
 	virtual ~ShrubberyCreationForm();
 
-	// Getters / Setters
-	// virtual std::string getName() const;
-	// virtual int getSignGrade() const;
-	// virtual int getExecGrade() const;
-	// virtual void beSigned(const Bureaucrat &signer);
+	// Operators
+	ShrubberyCreationForm &operator=(const ShrubberyCreationForm &assign);
+
+	// Methods
 	void action() const;
 	AForm *clone(std::string target);
 };

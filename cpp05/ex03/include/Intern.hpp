@@ -8,7 +8,7 @@
 #include "PresidentialPardonForm.hpp"
 // #include "EmptyForm"
 
-#define quote(x) #x
+#define MAX_FORMS 100
 
 class Intern
 {
@@ -24,7 +24,7 @@ public:
 	Intern &operator=(const Intern &assign);
 
 	// Methods
-	void learnForm(AForm &form);
+	bool learnForm(std::string formName, AForm &form);
 	AForm *makeForm(std::string formName, std::string target);
 
 	// Exceptions
@@ -33,16 +33,9 @@ public:
 		virtual const char *what() const throw();
 	};
 
-	// Nested class
-	class FormStack : public std::exception
-	{
-	protected:
-		std::string formName;
-		AForm *form;
-		FormStack *next;
-	};
-
 private:
+	AForm *_form[MAX_FORMS];
+	std::string _formName[MAX_FORMS];
 };
 
 // Stream operators

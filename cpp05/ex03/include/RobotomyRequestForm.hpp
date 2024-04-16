@@ -13,6 +13,9 @@ public:
 	// Destructor
 	virtual ~RobotomyRequestForm();
 
+	// Operators
+	RobotomyRequestForm &operator=(const RobotomyRequestForm &assign);
+
 	// Getters / Setters
 	void action() const;
 	AForm *clone(std::string target);

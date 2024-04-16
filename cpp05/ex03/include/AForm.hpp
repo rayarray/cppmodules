@@ -19,6 +19,7 @@ public:
 	AForm(std::string name, int sign_grade, int exec_grade, std::string target);
 	// __Destructor
 	virtual ~AForm();
+
 	// __Getters / Setters
 	virtual std::string getName() const;
 	virtual std::string getTarget() const;
