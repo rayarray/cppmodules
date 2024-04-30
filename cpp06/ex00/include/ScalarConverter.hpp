@@ -11,7 +11,6 @@ private:
 	// Constructors
 	ScalarConverter();
 	ScalarConverter(const ScalarConverter &copy);
-
 	// Destructor
 	virtual ~ScalarConverter();
 	// Operators
