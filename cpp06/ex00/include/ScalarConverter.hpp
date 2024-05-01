@@ -5,6 +5,11 @@
 #include <string>
 #include <sstream>
 
+#define TYPE_CHAR 1
+#define TYPE_INT 2
+#define TYPE_FLOAT 3
+#define TYPE_DOUBLE 4
+
 class ScalarConverter
 {
 private:
@@ -18,13 +23,6 @@ private:
 
 public:
 	static void convert(std::string literal);
-	// static int *checkformat(std::string literal, int *rval);
-	// static size_t leadingSpaces(std::string s);
-	// static size_t charCheck(std::string s, size_t pos);
-	// static size_t signCheck(std::string s, size_t pos);
-	// static size_t digits(std::string s);
-	// static size_t decimals(std::string s);
-	static void cast(std::string literal); // remove, only one method allowed
 };
 
 #endif

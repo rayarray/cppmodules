@@ -100,12 +100,13 @@ size_t pointCheck(std::string s, size_t pos)
 	return 0;
 }
 
-bool validCheck(std::string s)
+// returns 0 if not valid, 1 for char, 2 for int, 3 for float, 4 for double
+int validCheck(std::string s)
 {
 	size_t pos = leadingSpaces(s);
 	int numbers = 0, point = 0, digits = 0, fchar = 0;
 	if (charCheck(s, pos))
-		return true;
+		return 1;
 	if (signCheck(s, pos) > 0)
 		pos++;
 	if (digitsCheck(s, pos) > pos && ++numbers)
@@ -116,6 +117,12 @@ bool validCheck(std::string s)
 		pos = digitsCheck(s, pos);
 	if (pos < s.size() && s.at(pos) == 'f' && ++pos)
 		fchar++;
+	if (numbers && !point && !digits && !fchar)
+		return 2;
+	if ((numbers || (point && (digits || numbers))) && fchar)
+		return 3;
+	if (point && (numbers || digits) && !fchar)
+		return 4;
 	return (std::cout << "Invalid input, no representation possible!" << std::endl, pos + 1 == s.size());
 }
 
@@ -148,11 +155,12 @@ bool printConversions(int *possible, char c, int i, float f, double d)
 
 void ScalarConverter::convert(std::string literal)
 {
-	double d = 0;
-	float f = 0;
-	int i = 0;
 	char c = 0;
+	int i = 0;
+	float f = 0;
+	double d = 0;
 	(void)(d + f + i + c);
+	int valid_type = validCheck(literal);
 	size_t pos = leadingSpaces(literal);
 	if (infNanCheck(literal, pos) == 1)
 		printConversions((int[]){0, 0, 1, 1}, 0, 0, std::numeric_limits<float>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN());
@@ -160,10 +168,24 @@ void ScalarConverter::convert(std::string literal)
 		printConversions((int[]){0, 0, 1, 1}, 0, 0, std::numeric_limits<float>::infinity() * -1, std::numeric_limits<double>::infinity() * -1);
 	if (infNanCheck(literal, pos) == 3 || infNanCheck(literal, pos) == 5)
 		printConversions((int[]){0, 0, 1, 1}, 0, 0, std::numeric_limits<float>::infinity(), std::numeric_limits<double>::infinity());
-	if (!validCheck(literal))
+	if (valid_type == 0)
 		return;
-	if (charCheck(literal, pos))
+	std::stringstream ss(literal);
+	if (valid_type == TYPE_CHAR)
 	{
+		ss >> c;
+		if (std::isdigit(literal.at(0)))
+		{
+			std::cout << "Ambiguous literal. Is it a number literal or a char literal? Printing both cases" << std::endl;
+			printConversions();
+		}
+		printConversions((int[]){1, 0, 0, 0}, c, 0, 0, 0);
+	}
+	else if (valid_type == TYPE_INT)
+	{
+		ss >> d;
+		if (d < std::numeric_limits<int>::min() || d > std::numeric_limits<int> max())
+			printConversions((int[]){0, 0, 1, 1})
 	}
 }
 
@@ -180,7 +202,7 @@ void ScalarConverter::convert(std::string literal)
 // 		std::cout << "Special case! Last number is a decimal point. Defaulting to ignoring it" << std::endl;
 // }
 
-void ScalarConverter::cast(std::string literal)
+void sc_cast(std::string literal)
 {
 	std::cout << "string size " << literal.size() << std::endl;
 	std::stringstream ss(literal);
