@@ -93,6 +93,8 @@ size_t digitsCheck(std::string s, size_t pos)
 	return pos;
 }
 
+std::string getDigits(std::string s, size_t pos) { return (s.substr(pos, digitsCheck(s, pos))); }
+
 size_t pointCheck(std::string s, size_t pos)
 {
 	if (pos < s.size() && s.at(pos) == '.')
@@ -132,7 +134,7 @@ bool printConversions(int *possible, char c, int i, float f, double d)
 	(void)possible;
 	std::cout << "char: ";
 	if (possible[0])
-		std::cout << c << std::endl;
+		std::cout << "'" << c << "'" << std::endl;
 	else
 		std::cout << "impossible" << std::endl;
 	std::cout << "int: ";
@@ -153,12 +155,21 @@ bool printConversions(int *possible, char c, int i, float f, double d)
 	return true;
 }
 
+void convertFromDouble(bool *print_i, int *i, bool *print_f, float *f, bool *print_d, double *d)
+{
+	//(void)(print_i + print_f + print_d);
+	//(void)(i + f + d);
+	if (print_i && i && print_f && f && print_d && d)
+		(void)0;
+}
+
 void ScalarConverter::convert(std::string literal)
 {
 	char c = 0;
 	int i = 0;
 	float f = 0;
 	double d = 0;
+	bool print_i = false, print_f = false, print_d = false;
 	(void)(d + f + i + c);
 	int valid_type = validCheck(literal);
 	size_t pos = leadingSpaces(literal);
@@ -176,16 +187,18 @@ void ScalarConverter::convert(std::string literal)
 		ss >> c;
 		if (std::isdigit(literal.at(0)))
 		{
+			ss >> f;
+			convertFromDouble(&print_i, &i, &print_f, &f, &print_d, &d);
 			std::cout << "Ambiguous literal. Is it a number literal or a char literal? Printing both cases" << std::endl;
-			printConversions();
+			printConversions((int[]){0, 1, 1, 1}, c, i, f, d);
 		}
 		printConversions((int[]){1, 0, 0, 0}, c, 0, 0, 0);
 	}
 	else if (valid_type == TYPE_INT)
 	{
 		ss >> d;
-		if (d < std::numeric_limits<int>::min() || d > std::numeric_limits<int> max())
-			printConversions((int[]){0, 0, 1, 1})
+		if (d < std::numeric_limits<int>::min() || d > std::numeric_limits<int>::max())
+			printConversions((int[]){0, 0, 1, 1}, -1, -1, -1, -1);
 	}
 }
 
@@ -204,6 +217,7 @@ void ScalarConverter::convert(std::string literal)
 
 void sc_cast(std::string literal)
 {
+	// std::is_literal_type()
 	std::cout << "string size " << literal.size() << std::endl;
 	std::stringstream ss(literal);
 	double d;
