@@ -5,6 +5,7 @@
 #include <string>
 #include <sstream>
 
+#define INVALID_TYPE 0
 #define TYPE_CHAR 1
 #define TYPE_INT 2
 #define TYPE_FLOAT 3
