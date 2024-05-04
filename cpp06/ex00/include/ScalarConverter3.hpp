@@ -5,12 +5,6 @@
 #include <string>
 #include <sstream>
 
-#define NOTANUMBER 1
-#define MINUS_INFF 2
-#define PLUS_INFF 3
-#define MINUS_INF 4
-#define PLUS_INF 5
-
 #define INVALID_TYPE 0
 #define TYPE_CHAR 1
 #define TYPE_INT 2

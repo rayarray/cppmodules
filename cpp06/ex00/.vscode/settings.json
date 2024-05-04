@@ -1,7 +1,5 @@
 {
 	"files.associations": {
-		"string": "cpp",
-		"limits": "cpp",
 		"__bit_reference": "cpp",
 		"__config": "cpp",
 		"__debug": "cpp",
@@ -42,6 +40,7 @@
 		"iostream": "cpp",
 		"istream": "cpp",
 		"iterator": "cpp",
+		"limits": "cpp",
 		"locale": "cpp",
 		"memory": "cpp",
 		"mutex": "cpp",
@@ -52,6 +51,7 @@
 		"sstream": "cpp",
 		"stdexcept": "cpp",
 		"streambuf": "cpp",
+		"string": "cpp",
 		"string_view": "cpp",
 		"system_error": "cpp",
 		"tuple": "cpp",

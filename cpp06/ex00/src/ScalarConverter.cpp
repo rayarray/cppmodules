@@ -19,116 +19,7 @@ int *checkformat(std::string literal, int *rval)
 	// if (literal.at(i))
 }
 
-size_t leadingSpaces(std::string s)
-{
-	size_t pos = 0;
-	while (pos < s.size() && s.at(pos) == ' ')
-		pos++;
-	return pos;
-}
 
-size_t charCheck(std::string s, size_t pos)
-{
-	if (s.size() == pos + 1 && std::isprint(s.at(pos)))
-		return 1;
-	if (s.size() == pos + 3 && s.at(pos) == '\'' && std::isprint(s.at(pos + 1)) && s.at(pos + 2) == '\'')
-		return 2;
-	return 0;
-}
-
-// 0 = not special, 1 = nan, 2 = -inff, 3 = inff, 4 = -inf, 5 = inf
-size_t infNanCheck(std::string s, size_t pos)
-{
-	if (!s.compare(pos, -1, "nan") || !s.compare(pos, -1, "+nan") || !s.compare(pos, -1, "-nan"))
-		return 1;
-	if (!s.compare(pos, -1, "-inff"))
-		return 2;
-	if (!s.compare(pos, -1, "+inff") || !s.compare(pos, -1, "inff"))
-		return 3;
-	if (!s.compare(pos, -1, "-inf"))
-		return 4;
-	if (!s.compare(pos, -1, "+inf") || !s.compare(pos, -1, "inf"))
-		return 5;
-	return 0;
-}
-
-size_t signCheck(std::string s, size_t pos)
-{
-	if (s.size() > pos)
-	{
-		if (s.at(pos) == '-')
-			return 1;
-		else if (s.at(pos) == '+')
-			return 2;
-	}
-	return 0;
-}
-
-size_t signCheck2(std::string s)
-{
-	size_t sign = 0, i = 0;
-	while (i < s.size())
-	{
-		if (s.at(i) == '-')
-		{
-			if (sign == 0)
-				sign = 1;
-			else
-				return 3;
-		}
-		else if (s.at(i) == '+')
-		{
-			if (sign == 0)
-				sign = 2;
-			else
-				return 3;
-		}
-		i++;
-	}
-	return sign;
-}
-
-size_t digitsCheck(std::string s, size_t pos)
-{
-	while (pos < s.size() && std::isdigit(s.at(pos)))
-		pos++;
-	return pos;
-}
-
-std::string getDigits(std::string s, size_t pos) { return (s.substr(pos, digitsCheck(s, pos))); }
-
-size_t pointCheck(std::string s, size_t pos)
-{
-	if (pos < s.size() && s.at(pos) == '.')
-		return 1;
-	return 0;
-}
-
-// returns 0 if not valid, 1 for char, 2 for int, 3 for float, 4 for double
-int validCheck(std::string s)
-{
-	size_t pos = leadingSpaces(s);
-	int numbers = 0, point = 0, digits = 0, fchar = 0;
-	if (charCheck(s, pos))
-		return 1;
-	if (signCheck(s, pos) > 0)
-		pos++;
-	if (digitsCheck(s, pos) > pos && ++numbers)
-		pos = digitsCheck(s, pos);
-	if (pointCheck(s, pos) && ++point)
-		pos++;
-	if (digitsCheck(s, pos) > pos && ++digits)
-		pos = digitsCheck(s, pos);
-	if (pos < s.size() && s.at(pos) == 'f' && ++pos)
-		fchar++;
-	if (numbers && !point && !digits && !fchar)
-		return 2;
-	if ((numbers || (point && (digits || numbers))) && fchar)
-		return 3;
-	if (point && (numbers || digits) && !fchar)
-		return 4;
-	return (std::cout << "Invalid input, no representation possible!" << std::endl, pos + 1 == s.size());
-}
 
 bool printConversions(int *possible, char c, int i, float f, double d)
 {
@@ -166,7 +57,7 @@ void convertFromLongDouble(std::string s, bool *print_i, int *i, bool *print_f, 
 	long double ld = 0;
 	try
 	{
-		ld = std::stod(s);
+		ld = std::stold(s);
 	}
 	catch (const std::exception &e)
 	{
@@ -175,6 +66,14 @@ void convertFromLongDouble(std::string s, bool *print_i, int *i, bool *print_f, 
 	try
 	{
 		*d = std::stod(s);
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+	try
+	{
+		*f = std::stof(s);
 	}
 	catch (const std::exception &e)
 	{
@@ -193,7 +92,6 @@ void ScalarConverter::convert(std::string literal)
 	double d = 0;
 	bool print_i = false, print_f = false, print_d = false;
 	std::string txt_c, txt_i, txt_f, txt_d;
-	(void)(d + f + i + c);
 	int valid_type = validCheck(literal);
 	std::cout << "validCheck type: " << valid_type << std::endl;
 	size_t pos = leadingSpaces(literal);
@@ -232,8 +130,10 @@ void ScalarConverter::convert(std::string literal)
 			printConversions((int[]){0, 0, 1, 1}, -1, d, d, d);
 		else
 		{
-			c = () ? (int)d : 0;
-			printConversions((int[]){})
+			if (d < std::numeric_limits<char>::min() && d > std::numeric_limits<char>::max())
+				printConversions((int[]){0, 1, 1, 1}, c, d, d, d);
+			else
+				printConversions((int[]){1, 1, 1, 1}, c, d, d, d);
 		}
 	}
 }
