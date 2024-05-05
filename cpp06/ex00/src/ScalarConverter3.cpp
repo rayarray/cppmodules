@@ -2,17 +2,19 @@
 
 size_t leadingSpaces(std::string s) {
 	size_t pos = 0;
-	while (pos < s.size() && s.at(pos) == ' ')
+	while (pos < s.size() && s.at(pos) == ' ') {
 		if (pos + 1 == s.size() && s.at(pos) == ' ')
 			return pos;
 		pos++;
+	}
 	return pos;
 }
 
 size_t charCheck(std::string s, size_t pos) {
-	//if (s.size() == pos + 3 && s.at(pos) == '\'' && std::isprint(s.at(pos + 1)) && s.at(pos + 2) == '\'')
-	//	return 1;
-	//return 0;
+	std::cout << "size:" << s.size() << " pos:" << pos << std::endl;
+	//for (size_t i = 0; i < s.size(); i++)
+	//	std::cout << s.at(i);
+	//std::cout << std::endl;
 	return (s.size() == pos + 3 && s.at(pos) == '\'' && s.at(pos + 2) == '\'');
 }
 
@@ -41,33 +43,13 @@ size_t signCheck(std::string s, size_t pos) {
 	return 0;
 }
 
-// size_t signCheck2(std::string s) {
-// 	size_t sign = 0, i = 0;
-// 	while (i < s.size()) {
-// 		if (s.at(i) == '-') {
-// 			if (sign == 0)
-// 				sign = 1;
-// 			else
-// 				return 3;
-// 		}
-// 		else if (s.at(i) == '+') {
-// 			if (sign == 0)
-// 				sign = 2;
-// 			else
-// 				return 3;
-// 		}
-// 		i++;
-// 	}
-// 	return sign;
-// }
-
 size_t digitsCheck(std::string s, size_t pos) {
 	while (pos < s.size() && std::isdigit(s.at(pos)))
 		pos++;
 	return pos; 
 }
 
-std::string getDigits(std::string s, size_t pos) { return (s.substr(pos, digitsCheck(s, pos))); }
+//std::string getDigits(std::string s, size_t pos) { return (s.substr(pos, digitsCheck(s, pos))); }
 
 size_t pointCheck(std::string s, size_t pos) {
 	if (pos < s.size() && s.at(pos) == '.')
@@ -100,13 +82,15 @@ int validCheck(std::string s) {
 	return (std::cout << "Invalid input, no representation possible!" << std::endl, pos + 1 == s.size());
 }
 
-bool printConversions(int *possible, char c, int i, float f, double d, std::string strs)
-{
+bool printConversions(int *possible, char c, int i, float f, double d, std::string strs) {
+	(void)strs;
 	std::cout << "char: ";
-	if (possible[0])
+	if (possible[0] ==  1)
 		std::cout << "'" << c << "'" << std::endl;
-	else
+	else if (possible[0] == 0)
 		std::cout << "impossible" << std::endl;
+	else if (possible[0] < 0)
+		std::cout << strs << std::endl;
 	std::cout << "int: ";
 	if (possible[1])
 		std::cout << i << std::endl;
@@ -126,19 +110,73 @@ bool printConversions(int *possible, char c, int i, float f, double d, std::stri
 	return true;
 }
 
-void printInfNan(int special_type)
-{
+void printInfNan(int special_type) {
 	if (special_type == NOTANUMBER)
-		printConversions((int[]){0, 0, 1, 1}, 0, 0, std::numeric_limits<float>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN());
+		printConversions((int[]){0, 0, 1, 1}, 0, 0, std::numeric_limits<float>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), "");
 	else if (special_type == MINUS_INFF || special_type == MINUS_INF)
-		printConversions((int[]){0, 0, 1, 1}, 0, 0, std::numeric_limits<float>::infinity() * -1, std::numeric_limits<double>::infinity() * -1);
+		printConversions((int[]){0, 0, 1, 1}, 0, 0, std::numeric_limits<float>::infinity() * -1, std::numeric_limits<double>::infinity() * -1, "");
 	else if (special_type == PLUS_INFF || special_type == PLUS_INF)
-		printConversions((int[]){0, 0, 1, 1}, 0, 0, std::numeric_limits<float>::infinity(), std::numeric_limits<double>::infinity());
+		printConversions((int[]){0, 0, 1, 1}, 0, 0, std::numeric_limits<float>::infinity(), std::numeric_limits<double>::infinity(), "");
 }
 
-void printChar(std::string s, size_t pos)
-{
+void printChar(std::string s, size_t pos) {
+	char c = s.at(pos + 1);
+	int i = static_cast<int>(c);
+	float f = static_cast<float>(c);
+	double d = static_cast<double>(c);
+	if (std::isprint(c))
+		printConversions((int[]){1, 1, 1, 1}, c, i, f, d, "");
+	else
+		printConversions((int[]){0, 1, 1, 1}, c, i, f, d, "");
+}
 
+// 0 = ok, 1 = unprintable, 2 = out of range
+int	castChar(int i,  char *c) {
+	if (i >= std::numeric_limits<char>::min() && i <= std::numeric_limits<char>::max()) {
+		*c = static_cast<char>(i);
+		if (std::isprint(*c))
+			return 0;
+		return 1;
+	}
+	return 2;
+}
+
+void printInt(std::string s, size_t pos) {
+	int possible[4] = {0, 0, 0, 0};
+	char c = 0;
+	int i = 0;
+	try {
+	i = std::stoi(s.substr(pos, -1));
+	} catch (std::exception &e) {
+		std::cout << e.what() << std::endl;
+		try {
+
+		} catch (std::invalid_argument) {
+			std::cout << "Trying to convert from int, invalid argument. BYE" << std::endl;
+		} catch (std::out_of_range) {
+			
+		}
+	}
+	std::cout << "i: " << i << std::endl;
+	float f = static_cast<float>(i);
+	double d = static_cast<float>(i);
+	int char_state = castChar(i, &c);
+	if (char_state == 0)
+		printConversions((int[]){1, 1, 1, 1}, c, i, f, d, "");
+	else if (char_state == 1)
+		printConversions((int[]){-1, 1, 1, 1}, c, i, f, d, "unprintable");
+	else
+		printConversions((int[]){-1, 1, 1, 1}, c, i, f, d, "out of range");
+}
+
+void printFloat(std::string s, size_t pos) {
+	float f = 0;
+	try {
+		f = std::stof(s.substr(pos, -1));
+	} catch (std::exception &e) {
+		std::cout << e.what() << std::endl;
+	}
+	
 }
 
 void printType(int valid_type, std::string s, size_t pos) {
@@ -149,7 +187,8 @@ void printType(int valid_type, std::string s, size_t pos) {
 	else if (valid_type == TYPE_FLOAT)
 		printFloat(s, pos);
 	else if (valid_type == TYPE_DOUBLE)
-		printDouble(s, pos);
+		std::cout << "not implemented" << std::endl;
+	//	printDouble(s, pos);
 }
 
 void ScalarConverter::convert(std::string literal) {
