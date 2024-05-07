@@ -1,6 +1,6 @@
-NAME		=	convert
+NAME		=	identify
 
-SRC			=	main.cpp ScalarConverter.cpp
+SRC			=	main.cpp functions.cpp Base.cpp
 LIBS		=	
 
 SRCDIR		=	src

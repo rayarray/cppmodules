@@ -1,172 +1,167 @@
 #include "ScalarConverter.hpp"
 
-// Returns int array of 2 values: invalid/char/number/decimals (-1/0/1/2), sign (no 0/+ 1/- 2)
-int *checkformat(std::string literal, int *rval)
-{
-	size_t i = 0, sign = 0, dec = 0;
-	rval[0] = rval[1] = -1;
-	(void)(i + sign + dec);
-	while (i < literal.size() && literal.at(i) == ' ')
-		i++;
-	if (literal.size() == i && std::isprint(literal.at(i)) && rval[0]++ && ++rval[1])
-		return rval;
-	//	return ((int[]){0, 0});
-	// if (i < literal.size() && ((literal.at(i) == '-' &&sign = 2) || (literal.at(i) == '+' &&sign = 1)))
-	// i++;
-	while (i < literal.size() && std::isdigit(literal.at(i)))
-		i++;
-	return rval;
-	// if (literal.at(i))
+size_t  leadingSpaces(std::string s) {
+	size_t  pos = 0;
+	while (pos < s.size() && s.at(pos) == ' ') {
+		if (pos + 1 == s.size() && s.at(pos) == ' ')
+			return pos;
+		pos++;
+	}
+	return pos;
 }
 
+size_t charCheck(std::string s, size_t pos) {
+    return (s.size() == pos + 3 && s.at(pos) == '\'' && s.at(pos + 2) == '\'');
+}
 
+size_t infNanCheck(std::string s, size_t pos) {
+	if (!s.compare(pos, -1, "nan") || !s.compare(pos, -1, "+nan") || !s.compare(pos, -1, "-nan"))
+		return NOTANUMBER;
+	else if (!s.compare(pos, -1, "-inff"))
+		return MINUS_INFF;
+	else if (!s.compare(pos, -1, "+inff") || !s.compare(pos, -1, "inff"))
+		return PLUS_INFF;
+	else if (!s.compare(pos, -1, "-inf"))
+		return MINUS_INF;
+	else if (!s.compare(pos, -1, "+inf") || !s.compare(pos, -1, "inf"))
+		return PLUS_INFF;
+	return 0;
+}
 
-bool printConversions(int *possible, char c, int i, float f, double d)
-{
-	(void)(d + f + i + c);
-	(void)possible;
-	std::cout << "char: ";
-	if (possible[0])
-		std::cout << "'" << c << "'" << std::endl;
-	else
-		std::cout << "impossible" << std::endl;
-	std::cout << "int: ";
-	if (possible[1])
-		std::cout << i << std::endl;
-	else
-		std::cout << "impossible" << std::endl;
-	std::cout << "float: ";
-	if (possible[2])
-	{
-		std::cout << f << std::endl;
+// 1 is minus, 2 is plus, 0 for no sign
+size_t signCheck(std::string s, size_t pos) {
+	if (s.size() > pos) {
+		if (s.at(pos) == '-')
+			return 1;
+		else if (s.at(pos) == '+')
+			return 2;
 	}
-	else
-		std::cout << "impossible" << std::endl;
-	std::cout << "double: ";
-	if (possible[3])
-		std::cout << d << std::endl;
-	else
-		std::cout << "impossible" << std::endl;
+	return 0;
+}
+
+size_t digitsCheck(std::string s, size_t pos) {
+	while (pos < s.size() && std::isdigit(s.at(pos)))
+		pos++;
+	return pos; 
+}
+
+size_t pointCheck(std::string s, size_t pos) {
+	if (pos < s.size() && s.at(pos) == '.')
+		return 1;
+	return 0;
+}
+
+int validCheck(std::string s) {
+	size_t pos = leadingSpaces(s);
+	int numbers = 0, point = 0, digits = 0, fchar = 0;
+	if (charCheck(s, pos))
+		return TYPE_CHAR;
+	if (signCheck(s, pos) > 0)
+		pos++;
+	if (digitsCheck(s, pos) > pos && ++numbers)
+		pos = digitsCheck(s, pos);
+	if (pointCheck(s, pos) && ++point)
+        pos++;
+    if (digitsCheck(s, pos) > pos && ++digits)
+		pos = digitsCheck(s, pos);
+	if (pos < s.size() && s.at(pos) == 'f' && ++pos)
+		fchar++;
+	if (pos == s.size() && numbers && !point && !digits && !fchar)
+		return TYPE_INT;
+	if (pos == s.size() && (numbers || (point && (digits || numbers))) && fchar)
+		return TYPE_FLOAT;
+	if (pos == s.size() && point && (numbers || digits) && !fchar)
+		return TYPE_DOUBLE;
+	return (std::cout << "Invalid input, no representation possible!" << std::endl, INVALID_TYPE);
+}
+
+bool printInfNan(int special_type) {
+    if (special_type == NOT_INF_NAN)
+        return false;
+    std::cout << "char: impossible" << std::endl;
+    std::cout << "int: impossible" << std::endl;
+    float f = std::numeric_limits<float>::quiet_NaN();
+    double d = std::numeric_limits<double>::quiet_NaN();
+    if (special_type != NOTANUMBER) {
+        int minusplus = (special_type == MINUS_INFF || special_type == MINUS_INF) ? -1 : 1;
+        f = std::numeric_limits<float>::infinity() * minusplus;
+        d = std::numeric_limits<double>::infinity() * minusplus;
+    }
+    std::cout << "float: " << f << std::endl;
+    std::cout << "double: " << d << std::endl; 
 	return true;
 }
 
-void convertFromLongDouble(std::string s, bool *print_i, int *i, bool *print_f, float *f, bool *print_d, double *d)
-{
-	if (print_i && i && print_f && f && print_d && d) // debug
-		(void)0;									  // debug
-	long double ld = 0;
-	try
-	{
-		ld = std::stold(s);
-	}
-	catch (const std::exception &e)
-	{
-		std::cerr << e.what() << '\n';
-	}
-	try
-	{
-		*d = std::stod(s);
-	}
-	catch (const std::exception &e)
-	{
-		std::cerr << e.what() << '\n';
-	}
-	try
-	{
-		*f = std::stof(s);
-	}
-	catch (const std::exception &e)
-	{
-		std::cerr << e.what() << '\n';
-	}
-	std::string str_ld = std::to_string(ld);
-	std::string str_d = std::to_string(*d);
-	std::cout << "convFromLD ld and d string compare:" << str_ld.compare(str_d) << std::endl;
+bool printLitChar(std::string s, size_t pos) {
+    if (!std::isprint(s.at(pos + 1)))
+        std::cout << "char: unprintable" << std::endl;
+    else
+        std::cout << "char: '" << s.at(pos + 1) << "'" << std::endl;
+    std::cout << "int: " << static_cast<int>(s.at(pos + 1)) << std::endl;
+    std::cout << "float: " << static_cast<float>(s.at(pos + 1)) << std::endl;
+    std::cout << "double: " << static_cast<double>(s.at(pos + 1)) << std::endl;
+    return true;
 }
 
-void ScalarConverter::convert(std::string literal)
-{
-	char c = 0;
-	int i = 0;
-	float f = 0;
-	double d = 0;
-	bool print_i = false, print_f = false, print_d = false;
-	std::string txt_c, txt_i, txt_f, txt_d;
-	int valid_type = validCheck(literal);
-	std::cout << "validCheck type: " << valid_type << std::endl;
-	size_t pos = leadingSpaces(literal);
-	if (infNanCheck(literal, pos) == 1)
-		printConversions((int[]){0, 0, 1, 1}, 0, 0, std::numeric_limits<float>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN());
-	if (infNanCheck(literal, pos) == 2 || infNanCheck(literal, pos) == 4)
-		printConversions((int[]){0, 0, 1, 1}, 0, 0, std::numeric_limits<float>::infinity() * -1, std::numeric_limits<double>::infinity() * -1);
-	if (infNanCheck(literal, pos) == 3 || infNanCheck(literal, pos) == 5)
-		printConversions((int[]){0, 0, 1, 1}, 0, 0, std::numeric_limits<float>::infinity(), std::numeric_limits<double>::infinity());
-	if (valid_type == INVALID_TYPE)
+long double printChar(long double ld) {
+    std::cout << "char: ";
+    if (ld >= std::numeric_limits<char>::min() && ld <= std::numeric_limits<char>::max()) {
+        if (std::isprint(static_cast<char>(ld)))
+            std::cout << "'" << static_cast<char>(ld) << "'" << std::endl;
+        else
+            std::cout << "unprintable" << std::endl;
+    } else {
+        std::cout << "out of range" << std::endl;
+    }
+    return ld;
+}
+
+long double printInt(long double ld) {
+    std::cout << "int: ";
+    if (ld >= std::numeric_limits<int>::min() && ld <= std::numeric_limits<int>::max())
+        std::cout << static_cast<int>(ld) << std::endl;
+    else
+        std::cout << "out of range" << std::endl;
+    return ld;
+}
+
+long double printFloat(long double ld) {
+    std::cout << "float: ";
+    if (ld == 0 || (std::abs(ld) >= std::numeric_limits<float>::min() && std::abs(ld) <= std::numeric_limits<float>::max()))
+        std::cout << static_cast<float>(ld) << std::endl;
+    else
+        std::cout << "out of range" << std::endl;
+    return ld;
+}
+
+long double printDouble(long double ld) {
+    std::cout << "double: ";
+    if (ld == 0 || (std::abs(ld) >= std::numeric_limits<double>::min() && std::abs(ld) <= std::numeric_limits<double>::max()))
+        std::cout << static_cast<double>(ld) << std::endl;
+    else
+        std::cout << "out of range" << std::endl;
+    return ld;
+}
+
+bool getLongDouble(std::string s, size_t pos, long double *ld) {
+    try {
+        *ld = std::stold(s.substr(pos, -1));
+        return true;
+    } catch (std::invalid_argument const&) {
+        std::cout << "Invalid input, cannot convert to number!" << std::endl;
+    } catch (std::out_of_range const&) {
+        std::cout << "Given number cannot be converted into any type" << std::endl; 
+    }
+    return false;
+}
+
+void ScalarConverter::convert(std::string literal) {
+    long double ld;
+    if (printInfNan(infNanCheck(literal, leadingSpaces(literal))))
 		return;
-	std::stringstream ss(literal);
-	if (valid_type == TYPE_CHAR)
-	{
-		ss >> c;
-		if (charCheck(literal, pos) == 2)
-			printConversions((int[]){1, 0, 0, 0}, literal.at(pos + 1), i, f, d);
-		else
-		{
-			if (std::isdigit(literal.at(0)))
-			{
-				ss >> f;
-				convertFromLongDouble(literal, &print_i, &i, &print_f, &f, &print_d, &d);
-				std::cout << "Ambiguous literal. Is it a number literal or a char literal? Printing both cases, first as number literal" << std::endl;
-				printConversions((int[]){0, 1, 1, 1}, c, i, f, d);
-			}
-			printConversions((int[]){1, 0, 0, 0}, c, 0, 0, 0);
-		}
-	}
-	else if (valid_type == TYPE_INT)
-	{
-		std::cout << "debug ype int" << std::endl;
-		convertFromLongDouble(literal, &print_i, &i, &print_f, &f, &print_d, &d);
-		ss >> d;
-		if (d < std::numeric_limits<int>::min() || d > std::numeric_limits<int>::max())
-			printConversions((int[]){0, 0, 1, 1}, -1, d, d, d);
-		else
-		{
-			if (d < std::numeric_limits<char>::min() && d > std::numeric_limits<char>::max())
-				printConversions((int[]){0, 1, 1, 1}, c, d, d, d);
-			else
-				printConversions((int[]){1, 1, 1, 1}, c, d, d, d);
-		}
-	}
-}
-
-// void ScalarConverter::convert(std::string literal)
-// {
-// 	(void)literal;
-// 	while (*literal.begin() == ' ')
-// 		literal.pop_back();
-// 	if (*literal.rbegin() == 'f')
-// 		literal.pop_back();
-// 	if (*literal.rbegin() == '-' || *literal.rbegin() == '+')
-// 		std::cout << "Special case! Plus (+) or minus (-) followed by f. Defaulting to zero (0)" << std::endl;
-// 	if (*literal.rbegin() == '.')
-// 		std::cout << "Special case! Last number is a decimal point. Defaulting to ignoring it" << std::endl;
-// }
-
-void sc_cast(std::string literal)
-{
-	// std::is_literal_type()
-	std::cout << "string size " << literal.size() << std::endl;
-	std::stringstream ss(literal);
-	double d;
-	ss >> d;
-	std::cout << "Result of double conversion: [" << d << "]" << std::endl;
-	int i;
-	i = static_cast<int>(d);
-	std::cout << "Result of int conversion: [" << i << "]" << std::endl;
-	char c;
-	// c = static_cast<char>(i);
-	ss >> c;
-	std::cout << "Result of char conversion: [" << c << "]" << std::endl;
-	float f;
-	f = static_cast<float>(d);
-	std::cout << "Result of float conversion: [" << f << "]" << std::endl;
+    if (validCheck(literal) == INVALID_TYPE || 
+            ((charCheck(literal, leadingSpaces(literal)) && printLitChar(literal, leadingSpaces(literal))) ||
+            !getLongDouble(literal, leadingSpaces(literal), &ld)))
+        return;
+    printDouble(printFloat(printInt(printChar(ld))));
 }

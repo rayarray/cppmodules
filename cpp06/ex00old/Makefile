@@ -1,6 +1,6 @@
 NAME		=	convert
 
-SRC			=	main.cpp ScalarConverter.cpp
+SRC			=	main.cpp ScalarConverter3.cpp
 LIBS		=	
 
 SRCDIR		=	src

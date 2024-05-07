@@ -4,9 +4,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include <limits> //gcc
 
-#define NOT_INF_NAN 0
 #define NOTANUMBER 1
 #define MINUS_INFF 2
 #define PLUS_INFF 3
