@@ -19,8 +19,7 @@ void printElem(T element) {
 
 template<typename T = int>
 void incrementAndPrintElem(T element) {
-	element++;
-	std::cout << element << std::endl;
+	std::cout << ++element << std::endl;
 }
 
 #endif
