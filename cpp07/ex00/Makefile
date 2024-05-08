@@ -1,6 +1,6 @@
 NAME		=	whatever
 
-SRC			=	main.cpp whaatever.cpp
+SRC			=	main.cpp
 LIBS		=	
 
 SRCDIR		=	src
