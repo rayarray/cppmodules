@@ -1,4 +1,4 @@
-NAME		=	whatever
+NAME		=	wellnowimnotgoingtonameitwhateverifeveryoneelseisnamingitlikethat
 
 SRC			=	main.cpp
 LIBS		=	

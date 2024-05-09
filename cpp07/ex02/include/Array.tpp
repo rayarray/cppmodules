@@ -10,46 +10,55 @@ Array<T>::Array() {
 
 template<typename T>
 Array<T>::Array(unsigned int size) : _size(size) {
+	std::cout << "\e[0;33mNormal Constructor called of Array\e[0m" << std::endl;
 	try {
 	_data = new T[size]();
 	} catch (std::bad_alloc&) {
 		throw cannot_alloc();
-	}
-}
+}	}
 
 template<typename T>
-Array<T>::Array(const Array &copy) : Array(copy._size) {
+Array<T>::Array(const Array<T> &copy) : Array<T>(copy._size) {
 	std::cout << "\e[0;33mCopy Constructor called of Array\e[0m" << std::endl;
-	for (unsigned int i = 0; i < _size; i++) {
-		this[i] = copy[i];
-	}
+	std::memcpy(_data, copy._data, static_cast<size_t>(_size) * sizeof(T));
 }
 
 // Destructor
 template<typename T>
 Array<T>::~Array() {
 	std::cout << "\e[0;31mDestructor called of Array\e[0m" << std::endl;
-	delete _data;
+	delete[] _data;
 }
-
 
 // Operators
 template<typename T>
 Array<T> & Array<T>::operator=(const Array<T> &assign) {
-	if (this == assign) return *this;
-	delete (this);
-	(this) = new Array<T>(assign._size);
+	if (this == &assign) return *this;
+	delete[] _data;
+	_size = assign._size;
+	try {
+	_data = new T[_size]();
+	} catch (std::bad_alloc&) {
+		throw cannot_alloc();
+	}
 	for (unsigned int i = 0; i < _size; i++) {
-		this[i] = assign[i];
+		this->_data[i] = assign[i];
 	}
 	return *this;
 }
 
 template<typename T>
-T &Array<T>::operator[](unsigned int index) {
-	if (index + 1 > _size)
+T &Array<T>::operator[](size_t index) {
+	if (index >= _size)
 		throw out_of_bound();
-	return *(_data + (sizeof(T) * index));
+	return this->_data[index];
+}
+
+template<typename T>
+const T &Array<T>::operator[](size_t index) const {
+	if (index >= _size)
+		throw out_of_bound();
+	return this->_data[index];
 }
 
 // Exceptions

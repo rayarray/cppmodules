@@ -13,7 +13,7 @@ LIBINC		=	$(foreach l, $(LIBS),-I $(l) -L $(l) -l$(l:lib%=%))
 LIBARC		=	$(foreach l, $(LIBS),$(l)/$(l).a)
 INCLUDE		=	$(foreach i, $(INCDIR),-I $(i)) $(foreach l, $(LIBS),-I $(l))
 
-CFLAGS		=	-Wall -Wextra -Werror -std=c++17
+CFLAGS		=	-Wall -Wextra -Werror -std=c++17 -O0 -Og
 SFLAGS		=	-fsanitize=address -g
 
 CC 			=	c++

@@ -4,10 +4,6 @@
 # include <iostream>
 # include <string>
 
-struct bigData {
-	long double hog[16384];
-};
-
 template<typename T = int>
 class Array
 {
@@ -22,8 +18,9 @@ class Array
 		
 		// Operators
 		Array 	&operator=(const Array &assign);
-		T		&operator[](unsigned int index);
-		T		&getidx(unsigned int index);
+		T		&operator[](size_t index);
+		const T	&operator[](size_t index) const;
+		T		&getidx(size_t index);
 
 		// Exceptions
 		class out_of_bound : public std::exception {
@@ -34,8 +31,8 @@ class Array
 		};
 		
 	private:
-		unsigned int	_size;
-		T				*_data;
+		size_t	_size;
+		T		*_data;
 };
 
 # include "Array.tpp"
