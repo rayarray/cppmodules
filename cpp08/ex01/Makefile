@@ -1,6 +1,6 @@
-NAME		=	array
+NAME		=	span
 
-SRC			=	main.cpp
+SRC			=	main.cpp Span.cpp
 
 SRCDIR		=	src
 OBJDIR		=	obj
