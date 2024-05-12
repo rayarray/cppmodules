@@ -1,39 +1,9 @@
 #include "BitcoinExchange.hpp"
 
-std::map<int[3], unsigned int> BitcoinExchange::data;
+std::map<btc_date, unsigned int, btc_date_comp> BitcoinExchange::data;
 
 bool operator<(const btc_date& bd1, const btc_date& bd2) {
-	return (bd1.y < bd2.y || (bd1.y == bd2.y && bd1.m < bd2.m) || (bd1.y < bd2.y && bd1.m < bd2.m && bd1.d < bd2.d));
-}
-bool operator==(const btc_date& bd1, const btc_date& bd2) {
-	return (bd1.y == bd2.y && bd1.m == bd2.m && bd1.d == bd2.d);
-}
-
-// Constructors
-BitcoinExchange::BitcoinExchange()
-{
-	std::cout << "\e[0;33mDefault Constructor called of BitcoinExchange\e[0m" << std::endl;
-}
-
-BitcoinExchange::BitcoinExchange(const BitcoinExchange &copy)
-{
-	(void) copy;
-	std::cout << "\e[0;33mCopy Constructor called of BitcoinExchange\e[0m" << std::endl;
-}
-
-
-// Destructor
-BitcoinExchange::~BitcoinExchange()
-{
-	std::cout << "\e[0;31mDestructor called of BitcoinExchange\e[0m" << std::endl;
-}
-
-
-// Operators
-BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange &assign)
-{
-	(void) assign;
-	return *this;
+ 	return (bd1.y < bd2.y || (bd1.y == bd2.y && bd1.m < bd2.m) || (bd1.y < bd2.y && bd1.m < bd2.m && bd1.d < bd2.d));
 }
 
 bool BitcoinExchange::checkDate(const std::string str_date, btc_date& key_date, std::string& error) {
@@ -76,8 +46,8 @@ bool BitcoinExchange::addPrice(const std::string pair, std::string& error) {
 		else return (error = "Error parsing value", false);
 	}
 	if (data.find(key_date) != data.end())
-		return (std::cout << key_date.y << "-" << key_date.m << "-" << key_date.d << std::endl, error = "Value for date already entered", false);
-	return (std::cout << key_date.y << "-" << key_date.m << "-" << key_date.d << std::endl, data[key_date] = price, true);
+		return (error = "Value for date already entered", false);
+	return (data[key_date] = price, true);
 }
 
 bool BitcoinExchange::checkValue(const std::string pair, std::string& error) {
@@ -85,9 +55,7 @@ bool BitcoinExchange::checkValue(const std::string pair, std::string& error) {
 	btc_date value_date;
 	if (!checkDate(pair.substr(0, 10), value_date, error)) 
 		return (error = "Date error: " + error, false);
-	std::cout << pair.substr(10, 3) << std::endl;
 	if (pair.substr(10, 3).compare(" | ")) return (error = "Separator characters missing", false);
-	std::cout << pair.at(13) << std::endl;
 	if (!std::isdigit(pair.at(13)) || pair.at(13) == '.')
 		return (error = "Value did not begin with a number or a decimal point", false);
 	float amount;
@@ -101,19 +69,24 @@ bool BitcoinExchange::checkValue(const std::string pair, std::string& error) {
 	auto value_on_date = data.upper_bound(value_date);
 	if (value_on_date == data.begin()) 
 		return (error = "Value data for " + pair.substr(0, 10) + " not found", false);
-	std::cout << (--value_on_date)->second << std::endl;
 	return (std::cout << pair.substr(0, 10) << " => " << amount << " = " << amount/100 * value_on_date->second << std::endl, true);
 }
 
 bool BitcoinExchange::readPricesDBase(std::ifstream& f, std::string& error) {
 	std::string line;
-	std::cout << "readpricesdbase called" << std::endl;
 	if (!std::getline(f, line)) return (error = "Empty prices file" + line, false);
-	std::cout << "header is read" << std::endl;
 	if (line.compare("date,exchange_rate")) return (error = "Invalid prices header", false);
-	for (int i = 2; std::getline(f, line); i++) {
-		std::cout << line << std::endl;
+	for (int i = 2; std::getline(f, line); i++)
 		if (!addPrice(line, error))	return (error = "Line " + std::to_string(i) + ": " + error, false);
-	}
+	return true;
+}
+
+bool BitcoinExchange::processValues(std::ifstream & f, std::string& error) {
+	std::string line;
+	if (!std::getline(f, line)) return (error = "Empty values file" + line, false);
+	if (line.compare("date | value")) return (error = "Invalid values header", false);
+	for (int i = 2; std::getline(f, line); i++)
+		if (!checkValue(line, error)) 
+			std::cout << "Line " << std::to_string(i) << ": " << error << std::endl;
 	return true;
 }

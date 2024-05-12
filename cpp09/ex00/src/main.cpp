@@ -16,36 +16,12 @@ int main (int ac, char **ag) {
 	if (!prices_file) 
 		return (std::cout << "Error opening prices database file: " << strerror(errno) << std::endl, 0);
 	std::string error;
-	std::cout << "break" << std::endl;
 	if (!BitcoinExchange::readPricesDBase(prices_file, error))
-		if(prices_file.close(), std::cout << error << std::endl, 0)
-			{ ; }
+		return (prices_file.close(), std::cout << error << std::endl, 0);
 	std::ifstream values_file(values_db);
 	if (!values_file) 
 		return (std::cout << "Error opening values database file" << std::endl, 0);
-	//std::string date = "2012-02-29";
-	//btc_date key_date;
-	//if (!BitcoinExchange::checkDate(date, key_date, error))
-	//	std::cout << error << std::endl;
-	//else
-	//	std::cout << "Valid date: " << date << std::endl;
-	//if (BitcoinExchange::addData("2012-02-29,125.33", error))
-	//	std::cout << "Valid data added" << std::endl;
-	//else
-	//	std::cout << error << std::endl;
-	printMap();
-	if (!BitcoinExchange::checkValue("2012-03-01 | 4", error))
-		std::cout << error << std::endl;
-
-	std::map<btc_date, float> maptest;
-	btc_date t = { 2000, 1, 1 };
-	btc_date t2 = { 2000, 1, 2 };
-	//maptest.insert(t);
-	maptest[t];
-	maptest[t] = 1;
-	maptest[t2] = 2;
-	//maptest[t];
-	for (const auto& [date, value] : maptest)
-		std::cout << "[" << date.y << "-" << date.m << "-" << date.d<< "] = " << value << std::endl;
-
+	if (!BitcoinExchange::processValues(values_file, error))
+		return (values_file.close(), std::cout << error << std::endl, 0);
+	return (prices_file.close(), values_file.close(), 0);
 }
