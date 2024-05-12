@@ -13,31 +13,27 @@ struct btc_date {
 	int d;
 };
 
-struct btc_amount {
-	int coins;
-	int satoshis;
-};
+bool operator<(const btc_date& bd1, const btc_date& bd2);
 
 class BitcoinExchange
 {
 	private:
-		// Constructors
 		BitcoinExchange();
 		BitcoinExchange(const BitcoinExchange &copy);
-		
-		// Destructor
 		~BitcoinExchange();
-		
-		// Operators
+
 		BitcoinExchange& operator=(const BitcoinExchange &assign);
 
 	public:
-		static bool checkDate(std::string str_date, btc_date& key_date, std::string& error);
-		bool addData(std::string pair, std::string& error);
+//		static BitcoinExchange& run();
+		static bool checkDate(const std::string str_date, btc_date& key_date, std::string& error);
+		static bool addPrice(const std::string pair, std::string& error);
+		static bool checkValue(const std::string pair, std::string& error);
+		static bool readPricesDBase(std::ifstream& f, std::string& error);
+		static bool processValues(std::ifstream& f);
 		
-	private:
-		std::map<btc_date, float> data;
-		std::map<btc_date, btc_amount> input;
+	public:
+		static std::map<btc_date, unsigned int> data;
 };
 
 #endif
