@@ -1,12 +1,18 @@
 #include "BitcoinExchange.hpp"
 
-std::map<btc_date, unsigned int, btc_date_comp> BitcoinExchange::data;
+std::map<unsigned int, unsigned int> BitcoinExchange::data;
 
-bool operator<(const btc_date& bd1, const btc_date& bd2) {
- 	return (bd1.y < bd2.y || (bd1.y == bd2.y && bd1.m < bd2.m) || (bd1.y < bd2.y && bd1.m < bd2.m && bd1.d < bd2.d));
+unsigned int BitcoinExchange::serializeDate(int y, int m, int d) {
+	return (static_cast<unsigned int>(y * 10000 + m * 100 + d));
 }
 
-bool BitcoinExchange::checkDate(const std::string str_date, btc_date& key_date, std::string& error) {
+void BitcoinExchange::deserializeDate(const unsigned int& date, int &y, int &m, int& d) {
+	y = date / 10000;
+	m = (date - y) / 100;
+	d = (date - y - m);
+}
+
+bool BitcoinExchange::checkDate(const std::string str_date, unsigned int& key_date, std::string& error) {
 	if (str_date.size() != 10) return (error = "Incorrect format", false);
 	for (unsigned int i = 0; i < str_date.size(); i++) {
 		if ((!std::isdigit(str_date.at(i)) && i != 4 && i != 7) && ((i == 4 || i == 7) && str_date.at(i) != '-'))
@@ -29,12 +35,12 @@ bool BitcoinExchange::checkDate(const std::string str_date, btc_date& key_date, 
 		valid_max_d = ((y % 4 == 0 && !(y % 100 == 0 && y % 400 != 0))) ? 29 : 28;
 	if (d < 1 || d > valid_max_d)
 		return (error = "Invalid day of month", false);
-	return (key_date.y = y, key_date.m = m, key_date.d = d, true);
+	return (key_date = BitcoinExchange::serializeDate(y, m, d), true);
 }
 
 bool BitcoinExchange::addPrice(const std::string pair, std::string& error) {
 	if (pair.size() < 11) return (error = "Too short line in price database", false);
-	btc_date key_date;
+	unsigned int key_date;
 	if (!checkDate(pair.substr(0, 10), key_date, error)) return (error = "Date error: " + error, false);
 	if (pair.at(10) != ',') return (error = "Comma separator missing", false);
 	unsigned int price = 0, dec = 3;
@@ -52,7 +58,7 @@ bool BitcoinExchange::addPrice(const std::string pair, std::string& error) {
 
 bool BitcoinExchange::checkValue(const std::string pair, std::string& error) {
 	if (pair.size() < 14) return (error = "Too short line in value database", false);
-	btc_date value_date;
+	unsigned int value_date;
 	if (!checkDate(pair.substr(0, 10), value_date, error)) 
 		return (error = "Date error: " + error, false);
 	if (pair.substr(10, 3).compare(" | ")) return (error = "Separator characters missing", false);

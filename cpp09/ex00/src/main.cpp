@@ -2,8 +2,11 @@
 #include "BitcoinExchange.hpp"
 
 void printMap() {
-	for (const auto& [date, value] : BitcoinExchange::data)
-		std::cout << "[" << date.y << "-" << date.m << "-" << date.d<< "] = " << value << std::endl;
+	int y, m, d;
+	for (const auto& [date, value] : BitcoinExchange::data) {
+		BitcoinExchange::deserializeDate(date, y, m, d);
+		std::cout << "[" << y << "-" << m << "-" << d << "] = " << value << std::endl;
+	}
 }
 
 int main (int ac, char **ag) {

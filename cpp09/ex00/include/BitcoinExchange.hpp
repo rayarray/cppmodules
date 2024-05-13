@@ -7,20 +7,6 @@
 # include <map>
 # include <algorithm>
 
-struct btc_date {
-	int	y;
-	int m;
-	int d;
-};
-
-struct btc_date_comp {
-    bool operator()(const btc_date& lhs, const btc_date& rhs) const {
-        return std::tie(lhs.y, lhs.m, lhs.d) < std::tie(rhs.y, rhs.m, rhs.d);
-    }
-};
-
-bool operator<(const btc_date& bd1, const btc_date& bd2);
-
 class BitcoinExchange
 {
 	private:
@@ -31,14 +17,17 @@ class BitcoinExchange
 		BitcoinExchange& operator=(const BitcoinExchange &assign);
 
 	public:
-		static bool checkDate(const std::string str_date, btc_date& key_date, std::string& error);
+		//static unsigned int serializeDate(btc_date& date);
+		static unsigned int serializeDate(int y, int m, int d);
+		static void deserializeDate(const unsigned int &date, int& y, int& m, int& d);
+		static bool checkDate(const std::string str_date, unsigned int& key_date, std::string& error);
 		static bool addPrice(const std::string pair, std::string& error);
 		static bool checkValue(const std::string pair, std::string& error);
 		static bool readPricesDBase(std::ifstream& f, std::string& error);
 		static bool processValues(std::ifstream& f, std::string& error);
 		
 	public:
-		static std::map<btc_date, unsigned int, btc_date_comp> data;
+		static std::map<unsigned int, unsigned int> data;
 };
 
 #endif
